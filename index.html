@@ -1385,8 +1385,12 @@ function ctlBatting(){
   const tr = b.trait ? ` ✦${TRAITS[b.trait].n}` : '';
   setCtl(`
     <div class="ctl-info">⚔️ 공격 · ${G.myBatIdx%9+1}번 ${b.name}${tr} (OVR ${ovr(b)})${buffTag()}</div>
-    <button id="btn-swing">SWING!</button>`);
+    <div style="display:flex;gap:8px;">
+      <button id="btn-swing" style="flex:1;">SWING!</button>
+      <button class="btn btn-red btn-mid" id="btn-brawl" ${G.brawlDone?'disabled':''}>🔥 벤클</button>
+    </div>`);
   $('btn-swing').addEventListener('pointerdown', e=>{ e.preventDefault(); trySwing(); });
+  $('btn-brawl').onclick = ()=>{ sfx('ui'); startBrawl(); };
 }
 
 function ctlPitching(){
@@ -1397,7 +1401,10 @@ function ctlPitching(){
       ${p.pitches.map(k=>`<button data-pt="${k}" class="${G.pitchSel===k?'sel':''}">${PITCHES[k].n}</button>`).join('')}
     </div>
     <div class="sta-wrap"><span>체력</span><span class="sta-bar"><i id="sta-i" style="width:${G.stamina}%"></i></span><span id="sta-v">${Math.round(G.stamina)}</span></div>
-    <button class="btn btn-grn btn-mid" id="btn-throw" style="width:100%;">⚾ 투구</button>`);
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-grn btn-mid" id="btn-throw" style="flex:1;">⚾ 투구</button>
+      <button class="btn btn-red btn-mid" id="btn-brawl" ${G.brawlDone?'disabled':''}>🔥 벤클</button>
+    </div>`);
   if (!G.myPitcher.pitches.includes(G.pitchSel)) G.pitchSel = 'fast';
   document.querySelectorAll('#pitch-btns button').forEach(btn=>{
     btn.onclick = ()=>{
@@ -1407,6 +1414,7 @@ function ctlPitching(){
     };
   });
   $('btn-throw').onclick = startGauge;
+  $('btn-brawl').onclick = ()=>{ sfx('ui'); startBrawl(); };
 }
 
 function ctlGauge(){
